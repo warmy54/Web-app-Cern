@@ -2,6 +2,7 @@ package ch.cern.todo;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,10 @@ public class Controller {
         "/newcategory does the same as newtask but for categories with the format:\n" + 
         "{\"id\": \"1\",\"name\": \"doStuff\", \"description\": \"task where we DoStuff\"}\n" + 
         "/category/id/{id} search the database of categories for a given id\n"+ 
-        "/category/name/{name} does the same for names\n";
+        "/category/name/{name} does the same for names\n"+
+        "delete /task/id/{id} removes value with id from the db\n" + 
+        "delete /category/name/{name} and /category/id/{id} remove elements from the category db\n ";
+
 	}
     
     //post to add new task to DB 
@@ -82,5 +86,44 @@ public class Controller {
             return res;
         }
 	}
+    //tries to delete task with id id and return it, or gives a 400 if not found
+    @DeleteMapping("/task/id/{id}")
+    public Task deleteTask(@PathVariable Long id) {
+
+        Task result = taskdb.delete(id);
+
+        if(result == null){
+            //not found in db
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found");
+        } else {
+            return result;
+        }
+    }
+    //tries to delete category with id id and return it, or gives a 400 if not found
+    @DeleteMapping("/category/id/{id}")
+    public Task_Category deleteCategoryId(@PathVariable Long id) {
+
+        Task_Category result = catdb.deleteId(id);
+
+        if(result == null){
+            //not found in db
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found");
+        } else {
+            return result;
+        }
+    }
+    //tries to delete category with name name and return it, or gives a 400 if not found
+    @DeleteMapping("/category/name/{name}")
+    public Task_Category deleteTask(@PathVariable String name) {
+
+        Task_Category result = catdb.deleteName(name);
+
+        if(result == null){
+            //not found in db
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found");
+        } else {
+            return result;
+        }
+    }
 
 }

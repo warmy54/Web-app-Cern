@@ -37,4 +37,22 @@ public class CategoryMockDatabase implements CategoryDatabase{
         }
         return null;
     }
+    public Task_Category deleteId(Long id){
+        for(Task_Category elem: vect){
+            if(elem.getId().longValue() == id.longValue()){
+                vect.remove(elem);
+                return elem;
+            } 
+        }
+        return null;
+    }
+    public Task_Category deleteName(String name){
+        for(Task_Category elem: vect){
+            if(elem.getName().equals(name)){
+                vect.remove(elem);
+                return elem;
+            } 
+        }
+        return null;
+    }
 }

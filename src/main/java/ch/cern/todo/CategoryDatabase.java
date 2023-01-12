@@ -4,4 +4,6 @@ public interface CategoryDatabase {
     public void add(Task_Category obj) throws ConflictException;
     public Task_Category getId(Long id);
     public Task_Category getName(String name);
+    public Task_Category deleteId(Long id);
+    public Task_Category deleteName(String name);
 }

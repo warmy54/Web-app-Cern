@@ -177,7 +177,7 @@ class ApplicationTests {
 	}
 	//check that we get a 404 when trying to get an unexistant category
 	@Test
-	void CantGetWrongId() throws URISyntaxException{
+	void CantGetWrongTaskId() throws URISyntaxException{
 		//same thing
 		final String baseUrl = "http://localhost:"+port+"/newcategory/";
         URI uri = new URI(baseUrl);
@@ -231,5 +231,45 @@ class ApplicationTests {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/category/name/AAAAAA",
 		String.class)).contains("404");
 		
+	}
+	//check that delete remove an element by id
+	@Test
+	void DeleteDoesRemoveId() throws URISyntaxException{
+		//same thing as task but different names
+		final String baseUrl = "http://localhost:"+port+"/newcategory/";
+        URI uri = new URI(baseUrl);
+        String tsk = "{\"id\": \"10\",\"name\": \"DeletedCat1\", \"description\": \"i need to delete\"}";
+         
+        HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-type","application/json");  
+        HttpEntity<String> request = new HttpEntity<>(tsk, headers);
+         
+        ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		final String baseUrl2 = "http://localhost:"+port+"/category/id/10";
+        uri = new URI(baseUrl2);
+		this.restTemplate.delete(uri);
+		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/category/id/10",
+		String.class)).contains("404");
+	}
+
+
+	//check that delete remove an element by name
+	@Test
+	void DeleteDoesRemoveName() throws URISyntaxException{
+		//same thing as task but different names
+		final String baseUrl = "http://localhost:"+port+"/newcategory/";
+        URI uri = new URI(baseUrl);
+        String tsk = "{\"id\": \"11\",\"name\": \"DeletedCat2\", \"description\": \"i need to delete\"}";
+         
+        HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-type","application/json");  
+        HttpEntity<String> request = new HttpEntity<>(tsk, headers);
+         
+        ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		final String baseUrl2 = "http://localhost:"+port+"/category/name/DeletedCat2";
+        uri = new URI(baseUrl2);
+		this.restTemplate.delete(uri);
+		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/category/id/11",
+		String.class)).contains("404");
 	}
 }

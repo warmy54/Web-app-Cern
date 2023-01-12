@@ -15,4 +15,14 @@ public class TaskMockDatabase implements TaskDatabase {
         }
         return null;
     }
+    public Task delete(Long id){
+        for(Task elem: vect){
+            if(elem.getId().longValue() == id.longValue()){
+                vect.remove(elem);
+                return elem;
+                
+            } 
+        }
+        return null;
+    }
 }
