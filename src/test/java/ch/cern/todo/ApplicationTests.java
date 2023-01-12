@@ -272,4 +272,28 @@ class ApplicationTests {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/category/id/11",
 		String.class)).contains("404");
 	}
+	//we check if we can get a task List by filtering by categories
+	@Test
+	void PostFilterByCategoryCorrectly() throws URISyntaxException{
+		final String baseUrl = "http://localhost:"+port+"/newtask/";
+        URI uri = new URI(baseUrl);
+        String tsk = "{\"name\": \"Stuff1.0\", \"description\": \"DoStuff\", \"cat_id\": \"15\", \"deadl\": \"2007-12-03\"}";
+        String tsk2 = "{\"name\": \"Stuff2.0\", \"description\": \"DoStuff but better\", \"cat_id\": \"15\", \"deadl\": \"2006-11-02\"}";
+        String tsk3 = "{\"name\": \"Stuff3.0\", \"description\": \"DoStuff but worse\", \"cat_id\": \"16\", \"deadl\": \"2008-12-04\"}";
+         
+        HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-type","application/json");  
+        HttpEntity<String> request = new HttpEntity<>(tsk, headers);
+		HttpEntity<String> request2 = new HttpEntity<>(tsk2, headers);
+		HttpEntity<String> request3 = new HttpEntity<>(tsk3, headers);
+        ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result2 = this.restTemplate.postForEntity(uri, request2, String.class);
+		ResponseEntity<String> result3 = this.restTemplate.postForEntity(uri, request3, String.class);
+		
+		String body = this.restTemplate.getForObject("http://localhost:" + port + "/task/category/15",
+		String.class);
+		assertThat(body).contains("Stuff1.0");
+		assertThat(body).contains("Stuff2.0");
+		assert(!body.contains("3.0"));
+	}
 }

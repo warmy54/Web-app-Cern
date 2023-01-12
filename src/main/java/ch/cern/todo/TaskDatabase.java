@@ -4,4 +4,5 @@ public interface TaskDatabase {
     public void add(Task obj);
     public Task get(Long id);
     public Task delete(Long id);
+    public Task[] getTaskByCategory(Long cat_id);
 }

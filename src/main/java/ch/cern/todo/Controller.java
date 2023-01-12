@@ -23,7 +23,7 @@ public class Controller {
 		return "Greetings from Frédéric Necker! You are the " + getNum + 
         "th visitor \nThis should be a guide on the API.\n" +
         "the different endpoints are: \n" + 
-        "/newtask  creates a new task when posted with a json of the format:\n"+
+        "post /newtask  creates a new task when given a json of the format:\n"+
         "{\"name\": \"Stuff\", \"description\": \"DoStuff\", \"cat_id\": \"0\", \"deadl\": \"2007-12-03\"}\n" + 
         "/task/id/{id} looks in the database for a matching taskId" +
         "/newcategory does the same as newtask but for categories with the format:\n" + 
@@ -31,8 +31,9 @@ public class Controller {
         "/category/id/{id} search the database of categories for a given id\n"+ 
         "/category/name/{name} does the same for names\n"+
         "delete /task/id/{id} removes value with id from the db\n" + 
-        "delete /category/name/{name} and /category/id/{id} remove elements from the category db\n ";
-
+        "delete /category/name/{name} and /category/id/{id} remove elements from the category db\n "+
+        "/task/category/{id} will return all tasks of a given category\n";
+        
 	}
     
     //post to add new task to DB 
@@ -125,5 +126,11 @@ public class Controller {
             return result;
         }
     }
+    //search db for all task of a given category
+    @GetMapping("/task/category/{cat_id}")
+	public Task[] GetTasksByCategory(@PathVariable Long cat_id) {
+        Task[] res = taskdb.getTaskByCategory(cat_id) ;
+        return res;
+	}
 
 }

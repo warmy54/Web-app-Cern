@@ -25,4 +25,24 @@ public class TaskMockDatabase implements TaskDatabase {
         }
         return null;
     }
+    //
+    public Task[] getTaskByCategory(Long cat_id){
+        int count = 0;
+        //to create an array we need its size so saddly we will have to iterate twice, we could take a 
+        //memory penalty to speed things up by storing all the hits in a structure while counting.
+        for(Task elem: vect){
+            if(elem.getCategory().longValue() == cat_id.longValue()){
+                count++;
+            } 
+        }
+        Task res[] = new Task[count];
+        int count2 = 0;
+        for(Task elem: vect){
+            if(elem.getCategory().longValue() == cat_id.longValue()){
+                res[count2] = elem;
+                count2++;
+            } 
+        }
+        return res;
+    }
 }
